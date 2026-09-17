@@ -1,0 +1,34 @@
+# Value Fusion OpenProject release manifest
+# Fill docker_digest / image_id after a successful local build.
+# Do not put secrets in this file.
+
+vf_release: "17.8.0-vf.1"
+upstream_version: "17.8.0"
+upstream_commit: "2d1ae9c1f2de49d363e0ec2cea7d7f2991ed405a"
+vf_source_commit: "REPLACE_AFTER_COMMIT" # git rev-parse HEAD on publish branch
+docker_image: "valuefusion/openproject:17.8.0-vf.1"
+docker_image_id: "REPLACE_AFTER_BUILD"
+docker_digest: "REPLACE_AFTER_BUILD"
+built_at: "REPLACE_AFTER_BUILD"
+
+features:
+  entra_sso: true
+  vf_branding: false
+
+auth:
+  provider_slug: "vf_entra"
+  # Proven against OpenProject v17.8.0 routes + OmniAuth strategy name vf_entra.
+  # Login button → GET /auth/vf_entra (Rack OmniAuth request phase; Rails route is a stub 404).
+  # IdP returns to GET|POST /auth/vf_entra/callback → OmniAuthLoginController.
+  # Absolute URI = https://<OPENPROJECT_HOST__NAME>/auth/vf_entra/callback
+  # Do not register in Entra until first VF image smoke confirms this path.
+  callback_path: "/auth/vf_entra/callback"
+  request_path: "/auth/vf_entra"
+  identity: "tid:oid"
+  enterprise_sso_used: false
+
+notes: |
+  GitHub origin holds thin VF distribution history.
+  Local vf/release-17.8 may retain full upstream ancestry for rebases.
+  Do not orphan/force-recreate origin history on ordinary upgrades;
+  record upstream bumps as explicit baseline-update commits.

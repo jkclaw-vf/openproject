@@ -9,7 +9,7 @@ Track every Value Fusion deviation from upstream OpenProject Community.
 | Field | Value |
 |---|---|
 | Purpose | Production Microsoft Entra OIDC login without Enterprise `sso_auth_providers` entitlement |
-| Changed upstream surface | `Gemfile.modules` (add gem); new module only; narrow patch of `OmniAuthStartController` via engine `patches` |
+| Changed upstream surface | `Gemfile.modules` (add gem); new module only (no OmniAuthStartController — absent on 17.8.0) |
 | Why not Enterprise path | Enterprise OIDC UI/engine is gated; card forbids enabling gated modules / copying EE implementation / flipping `filtered_strategy?` to expose EE providers |
 | Approach | Independent `OmniAuth::Builder` + `OmniAuth::Strategies::VfEntra` reusing bundled `omniauth-openid-connect`; login button via VF hook; AuthProvider row via `PluginAuthProvider` for linking |
 | Upgrade impact | Re-test OmniAuth callback, start controller patch, gem load on each upstream 17.x bump |
@@ -26,9 +26,20 @@ Track every Value Fusion deviation from upstream OpenProject Community.
 | Tests | Image smoke: web/worker/cron same digest |
 | Rollback | Revert compose to previous VF image tag or last known `openproject/openproject@sha256:…` |
 
+### VF-003 — Thin distribution history on GitHub origin
+
+| Field | Value |
+|---|---|
+| Purpose | Publish VF changes without mirroring full upstream git history |
+| Changed upstream surface | Process only (`docs/vf/FORK_STRATEGY.md`, release manifests) |
+| Upgrade impact | Append baseline-update commits on origin; do not orphan/force-recreate |
+| Tests | n/a |
+| Rollback | n/a |
+
 ## Explicit non-divergences
 
 - Do **not** patch `OpenProject::Plugins::AuthPlugin.filtered_strategy?`
 - Do **not** enable `modules/openid_connect` admin UI without entitlement
 - Do **not** copy Enterprise provider models/services into Community
 - Do **not** implement JWKS/crypto by hand
+- Do **not** rewrite published VF distribution history on ordinary upgrades

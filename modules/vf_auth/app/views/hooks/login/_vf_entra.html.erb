@@ -1,10 +1,17 @@
 <%#-- copyright
-Value Fusion OpenProject extension.
+Value Fusion OpenProject extension (Community vf_entra).
+Compatible with OpenProject 17.8.x login hooks (direct OmniAuth start link).
 ++#%>
 
 <% if OpenProject::VfAuth.enabled? %>
-  <%= omniauth_provider_button(
-        OpenProject::VfAuth::PROVIDER_SLUG,
-        display_name: t("vf_auth.login_with_microsoft")
-      ) %>
+  <%
+    opts = { script_name: OpenProject::Configuration.rails_relative_url_root }
+    opts[:origin] = params["back_url"] if params["back_url"]
+  %>
+  <a
+    href="<%= omni_auth_start_path(OpenProject::VfAuth::PROVIDER_SLUG, opts) %>"
+    class="auth-provider auth-provider-vf_entra button"
+    data-turbo="false">
+    <span class="auth-provider-name"><%= t("vf_auth.login_with_microsoft") %></span>
+  </a>
 <% end %>

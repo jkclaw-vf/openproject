@@ -23,6 +23,10 @@ Independent of OpenProject Enterprise SSO (`sso_auth_providers`).
 
 `https://<host>/auth/vf_entra/callback`
 
+Provider start (OpenProject 17.8.x login button):
+
+`https://<host>/auth/vf_entra`
+
 ## V1 account policy
 
 - Disable OpenProject self-registration.

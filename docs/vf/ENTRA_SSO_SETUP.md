@@ -20,14 +20,11 @@ Do **not** register the redirect URI until this runbook matches the deployed VF 
 https://pm.valuefusion.com/auth/vf_entra/callback
 ```
 
-Provider start (browser):
+Provider start (OpenProject 17.8.x login button → OmniAuth request phase):
 
 ```
-https://pm.valuefusion.com/login/omniauth/vf_entra
+https://pm.valuefusion.com/auth/vf_entra
 ```
-
-(POST then goes to `/auth/vf_entra`.)
-
 ## Permissions / scopes
 
 Delegated OIDC scopes only:
