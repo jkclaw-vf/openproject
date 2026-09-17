@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require "open_project/vf_auth/configuration"
-require "open_project/vf_auth/engine"
 
 module OpenProject
   module VfAuth
+    # Defined before Engine load; OmniAuth strategy reads this at require time.
     PROVIDER_SLUG = "vf_entra"
 
     class << self
@@ -18,3 +18,5 @@ module OpenProject
     end
   end
 end
+
+require "open_project/vf_auth/engine"

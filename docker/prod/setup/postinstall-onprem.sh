@@ -8,10 +8,16 @@ apt-get update -qq
 # that are not on a network with a domain, this will result in a failed install.
 #
 # See https://salsa.debian.org/postfix-team/postfix-dev/-/blob/debian/buster-updates/debian/postfix.postinst#L40
+#
+# While the real hostname binary is hidden from postfix, provide a stub so
+# ssl-cert's postinst (a postfix dependency) can still call `hostname`.
 if [ -f /run/.containerenv -o -f /.dockerenv ]; then
 	mv /bin/hostname /bin/x-hostname
+	printf '#!/bin/sh\necho openproject.local\n' > /bin/hostname
+	chmod +x /bin/hostname
 	echo openproject.local > /etc/hostname
 	apt-get install -y postfix
+	rm -f /bin/hostname
 	mv /bin/x-hostname /bin/hostname
 fi
 

@@ -16,10 +16,15 @@ module OpenProject
                bundled: true,
                requires_openproject: ">= 17.8.0"
 
-      # Independent OmniAuth registration — does NOT use AuthPlugin.register_auth_providers
-      # and therefore does not pass through EnterpriseToken sso_auth_providers filtering.
-      # On OpenProject 17.8.x, login buttons link to /auth/:provider (Rack OmniAuth request
-      # phase). There is no OmniAuthStartController on this baseline.
+      # lib/omniauth/... must map to OmniAuth:: (gem spelling), not Omniauth::
+      class_inflection_override("omniauth" => "OmniAuth")
+
+      # Independent VF OmniAuth registration via OmniAuth::Builder.
+      # Does not call AuthPlugin.register_auth_providers.
+      # Does not modify filtered_strategy? or EnterpriseToken.
+      # Enterprise SSO gate remains intact and unused.
+      # On OpenProject 17.8.x, login buttons link to /auth/:provider (Rack OmniAuth
+      # request phase). There is no OmniAuthStartController on this baseline.
       initializer "openproject_vf_auth.omniauth", before: :build_middleware_stack do |app|
         next unless OpenProject::VfAuth::Configuration.enabled?
 

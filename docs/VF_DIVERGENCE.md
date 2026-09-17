@@ -10,9 +10,9 @@ Track every Value Fusion deviation from upstream OpenProject Community.
 |---|---|
 | Purpose | Production Microsoft Entra OIDC login without Enterprise `sso_auth_providers` entitlement |
 | Changed upstream surface | `Gemfile.modules` (add gem); new module only (no OmniAuthStartController — absent on 17.8.0) |
-| Why not Enterprise path | Enterprise OIDC UI/engine is gated; card forbids enabling gated modules / copying EE implementation / flipping `filtered_strategy?` to expose EE providers |
-| Approach | Independent `OmniAuth::Builder` + `OmniAuth::Strategies::VfEntra` reusing bundled `omniauth-openid-connect`; login button via VF hook; AuthProvider row via `PluginAuthProvider` for linking |
-| Upgrade impact | Re-test OmniAuth callback, start controller patch, gem load on each upstream 17.x bump |
+| Why not Enterprise path | Enterprise OIDC UI/engine remains gated and unused; card forbids enabling gated modules / copying EE implementation / flipping `filtered_strategy?` |
+| Approach | Independent VF-owned Community path: `OmniAuth::Builder` + `OmniAuth::Strategies::VfEntra` (bundled `omniauth-openid-connect`); login hook; `PluginAuthProvider` for linking. Enterprise SSO gate intact. |
+| Upgrade impact | Re-test OmniAuth callback, gem load, Zeitwerk `omniauth`→`OmniAuth` inflection on each upstream 17.x bump |
 | Tests | `modules/vf_auth/spec/**` |
 | Rollback | Remove gem from `Gemfile.modules`, rebuild image without module, unset `VF_ENTRA_*`; local login remains |
 

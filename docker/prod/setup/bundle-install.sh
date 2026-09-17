@@ -4,7 +4,7 @@ set -e
 
 bundle config set --local path 'vendor/bundle'
 bundle config set --local without 'test development'
-bundle install --jobs=8 --retry=3
+bundle install --jobs="${BUNDLE_JOBS:-8}" --retry="${BUNDLE_RETRY:-3}"
 # Use bundle clean to force remove gem versions the Gemfile.lock does not depend on
 bundle clean --force
 bundle config set deployment 'true'
