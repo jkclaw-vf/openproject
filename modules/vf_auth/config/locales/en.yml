@@ -1,0 +1,5 @@
+en:
+  vf_auth:
+    login_with_microsoft: "Continue with Microsoft"
+    plugin_name: "Value Fusion Entra Authentication"
+    plugin_description: "Independent Microsoft Entra ID (OIDC) authentication for Value Fusion."

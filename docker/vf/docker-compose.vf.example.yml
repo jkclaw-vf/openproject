@@ -1,0 +1,29 @@
+# Example overlay for /opt/openproject — do NOT commit secrets.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.vf.yml up -d
+#
+# Build the VF image from the fork release branch first:
+#   docker build -f docker/prod/Dockerfile -t valuefusion/openproject:17.8.0-vf.1 .
+
+x-op-image: &image
+  image: valuefusion/openproject:17.8.0-vf.1
+
+x-op-app: &app
+  <<: *image
+  env_file:
+    - path: /etc/valuefusion/openproject-secrets.env
+      required: false
+  environment:
+    VF_ENTRA_TENANT_ID: "${VF_ENTRA_TENANT_ID}"
+    VF_ENTRA_CLIENT_ID: "${VF_ENTRA_CLIENT_ID}"
+    VF_ENTRA_ISSUER: "${VF_ENTRA_ISSUER}"
+    VF_ENTRA_PROVIDER_NAME: "${VF_ENTRA_PROVIDER_NAME:-Microsoft}"
+    # VF_ENTRA_CLIENT_SECRET comes from secrets env_file
+
+services:
+  web:
+    <<: *app
+  worker:
+    <<: *app
+  cron:
+    <<: *app

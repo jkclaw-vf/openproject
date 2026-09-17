@@ -1,0 +1,10 @@
+<%#-- copyright
+Value Fusion OpenProject extension.
+++#%>
+
+<% if OpenProject::VfAuth.enabled? %>
+  <%= omniauth_provider_button(
+        OpenProject::VfAuth::PROVIDER_SLUG,
+        display_name: t("vf_auth.login_with_microsoft")
+      ) %>
+<% end %>
