@@ -1,15 +1,14 @@
 # Value Fusion OpenProject release manifest
-# Fill docker_digest / image_id after a successful local build.
 # Do not put secrets in this file.
 
 vf_release: "17.8.0-vf.1"
 upstream_version: "17.8.0"
 upstream_commit: "2d1ae9c1f2de49d363e0ec2cea7d7f2991ed405a"
-vf_source_commit: "REPLACE_AFTER_COMMIT" # git rev-parse HEAD on publish branch
+vf_source_commit: "e7fa01c22b62056a667c33d4c609b79d0c5bf855"
 docker_image: "valuefusion/openproject:17.8.0-vf.1"
-docker_image_id: "REPLACE_AFTER_BUILD"
-docker_digest: "REPLACE_AFTER_BUILD"
-built_at: "REPLACE_AFTER_BUILD"
+docker_image_id: "sha256:40f86673f1f1ed3bcb5165ae18b071fbe7387c001cb115fb2cdff2e7a69c1f99"
+docker_digest: "sha256:40f86673f1f1ed3bcb5165ae18b071fbe7387c001cb115fb2cdff2e7a69c1f99"
+built_at: "2026-09-17T19:25:33.388279252Z"
 
 features:
   entra_sso: true
@@ -17,11 +16,11 @@ features:
 
 auth:
   provider_slug: "vf_entra"
-  # Proven against OpenProject v17.8.0 routes + OmniAuth strategy name vf_entra.
-  # Login button → GET /auth/vf_entra (Rack OmniAuth request phase; Rails route is a stub 404).
-  # IdP returns to GET|POST /auth/vf_entra/callback → OmniAuthLoginController.
-  # Absolute URI = https://<OPENPROJECT_HOST__NAME>/auth/vf_entra/callback
-  # Do not register in Entra until first VF image smoke confirms this path.
+  # Proven on VF smoke (GCP) against image 17.8.0-vf.1:
+  # Login button → GET /auth/vf_entra
+  # Callback → /auth/vf_entra/callback → OmniAuthLoginController
+  # Production absolute URI (register in Entra only at cutover):
+  #   https://pm.valuefusion.com/auth/vf_entra/callback
   callback_path: "/auth/vf_entra/callback"
   request_path: "/auth/vf_entra"
   identity: "tid:oid"
@@ -29,6 +28,7 @@ auth:
 
 notes: |
   GitHub origin holds thin VF distribution history.
-  Local vf/release-17.8 may retain full upstream ancestry for rebases.
+  Built on GCP amd64 from published tip e7fa01c; smoked via Caddy :80.
+  docker_digest above is local image id (not a registry push digest).
   Do not orphan/force-recreate origin history on ordinary upgrades;
   record upstream bumps as explicit baseline-update commits.
